@@ -26,7 +26,7 @@ public class Events {
             return (System.currentTimeMillis() - firstJoinTime) < (5 * 6000); // TODO: make this a config.
         }
 
-        if (netServer.admins.getInfoOptional(uuid) != null) {
+        if (netServer.admins.getInfo(uuid).timesJoined > 1) {
             return false;
         }
 
@@ -39,9 +39,14 @@ public class Events {
             return true;
         }
 
-        return !(action.type == Administration.ActionType.placeBlock ||
+        if (!(action.type == Administration.ActionType.placeBlock ||
                 action.type == Administration.ActionType.breakBlock ||
                 action.type == Administration.ActionType.command
-        );
+            )) {
+            action.player.sendMessage(String.format("%s You are not allowed to place blocks yet!", Main.pluginMessageName));
+            return false;
+        }
+
+        return true;
     }
 }
