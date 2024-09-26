@@ -1,6 +1,7 @@
 package org.lettsn.first_join_delay;
 
 import mindustry.game.EventType;
+import mindustry.gen.Call;
 import mindustry.net.Administration;
 
 import static mindustry.Vars.netServer;
@@ -39,11 +40,12 @@ public class Events {
             return true;
         }
 
-        if (!(action.type == Administration.ActionType.placeBlock ||
+        if (
+                action.type == Administration.ActionType.placeBlock ||
                 action.type == Administration.ActionType.breakBlock ||
-                action.type == Administration.ActionType.command
-            )) {
-            action.player.sendMessage(String.format("%s You are not allowed to place blocks yet!", Main.pluginMessageName));
+                action.type == Administration.ActionType.configure
+            ) {
+            action.player.sendMessage("You are not allowed to interact with blocks yet!");
             return false;
         }
 
