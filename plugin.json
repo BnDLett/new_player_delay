@@ -3,5 +3,5 @@
   "author": "LSN",
   "main": "org.lettsn.first_join_delay.Main",
   "description": "A plugin that delays the actions of a new player until a specified time has passed.",
-  "version": "0.1.2"
+  "version": "0.2.0"
 }

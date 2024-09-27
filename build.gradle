@@ -23,8 +23,10 @@ ext{
 
 //java 8 backwards compatibility flag
 allprojects{
-    tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs.addAll(['--release', '8'])
+        }
     }
 }
 
@@ -41,6 +43,6 @@ jar{
     }
 
     from(rootDir){
-        include "plugin.hjson"
+        include "plugin.json"
     }
 }
