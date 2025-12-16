@@ -1,6 +1,7 @@
 package org.lettsn.first_join_delay.server;
 
 import mindustry.game.EventType;
+import mindustry.gen.Player;
 import mindustry.net.Administration;
 import org.lettsn.first_join_delay.Main;
 import org.lettsn.first_join_delay.Utilities.PluginMessage;
@@ -14,6 +15,7 @@ public class Events {
     public static void load() {
         arc.Events.on(EventType.PlayerConnect.class, Events::handleFirstJoin);
         netServer.admins.addActionFilter(Events::checkAction);
+        netServer.admins.addChatFilter(Events::checkChat);
     }
 
     /**
@@ -46,7 +48,7 @@ public class Events {
             return;
         }
 
-        PluginMessage.send(event.player, String.format("Hi. It appears as if you're a new player. Do understand that " +
+        PluginMessage.send(event.player, String.format("It appears as if you're a new player. Do understand that " +
                 "you will not be able to do actions for %d minutes. This is to help ensure the safety and security of" +
                 " this server.", Main.configs.getDelayMinutes()));
     }
@@ -61,15 +63,20 @@ public class Events {
             return true;
         }
 
-        if (
-                action.type == Administration.ActionType.placeBlock ||
-                action.type == Administration.ActionType.breakBlock ||
-                action.type == Administration.ActionType.configure
-            ) {
-            PluginMessage.send(action.player, "You are not allowed to interact with blocks yet!");
+        if (action.type != Administration.ActionType.respawn) {
+            PluginMessage.send(action.player, "You are not allowed to do much yet!");
             return false;
         }
 
         return true;
+    }
+
+    public static String checkChat(Player player, String message) {
+        if (hasPlayedBefore(player.uuid())) {
+            return message;
+        }
+
+        PluginMessage.send(player, "You are not allowed to chat yet!");
+        return null;
     }
 }
